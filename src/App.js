@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import MoviesList from './component/MovieList';
 import './App.css';
@@ -10,11 +10,11 @@ function App() {
   const [retrying, setRetrying] = useState();
   const [check, setCheck] = useState(false);
   
-  async function fetchMoviesHandler () {
+  const fetchMoviesHandler = useCallback(async() => {
     setLoading(true);
     setError(null);
     try{
-      const response = await fetch('https://swapi.dev/api/film');
+      const response = await fetch('https://swapi.dev/api/films');
       if(!response.ok){
         throw new Error('Something went wrong...Retrying');
       }
@@ -38,7 +38,12 @@ function App() {
     }
       
         setLoading(false);
-  }
+  },[]);
+
+  useEffect(() => {
+    fetchMoviesHandler()
+    console.log('useEffect is called');
+  },[fetchMoviesHandler])
 
   let content = <p>No movies Found</p>
 
