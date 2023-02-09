@@ -1,54 +1,46 @@
-import React, { useState } from "react";
+import React, { useState ,useRef } from 'react';
 
 import classes from './MovieForm.module.css';
 
-const MoviesForm = (props) => {
-    const [title, setTitle] = useState('');
-    const [openingText, setOpeningText] = useState('');
-    const [releaseDate, setReleaseDate] = useState('');
+function AddMovie(props) {
+  const titleRef = useRef('');
+  const openingTextRef = useRef('');
+  const releaseDateRef = useRef('');
 
-    const titleHandler = (event) => {
-        setTitle(event.target.value);
-    }
+//   const [title, setTitle] = useState('');
 
-    const openingTextHandler = (event) => {
-        setOpeningText(event.target.value);
-    }
+  function submitHandler(event) {
+    event.preventDefault();
 
-    const releaseDateHandler = (event) => {
-        setReleaseDate(event.target.value);
-    }
-
-    const submitHandler = (event) => {
-        event.preventDefault();
-
-        props.onAddMovie(title,openingText,releaseDate);
-        setTitle('');
-        setOpeningText('');
-        setReleaseDate('');
+    const movie = {
+      title: titleRef.current.value,
+      openingText: openingTextRef.current.value,
+      releaseDate: releaseDateRef.current.value,
     };
 
-    return(
-        <React.Fragment>
-            <section>
-                <form onSubmit={submitHandler}>
-                    <div className={classes.control}>
-                        <label htmlFor="title">Title</label>
-                        <input type="text" id="title" value={title} onChange={titleHandler}/>
-                    </div>
-                    <div className={classes.control}>
-                        <label htmlFor="opening-text">Opening Text</label>
-                        <textarea type="text" id="opening-text" rows='5'value={openingText} onChange={openingTextHandler}></textarea>
-                    </div>
-                    <div className={classes.control}>
-                        <label htmlFor="release-date">Release Date</label>
-                        <input type="text" id="release-date" value={releaseDate} onChange={releaseDateHandler}/>
-                    </div>
-                    <button>Add Movie</button>
-                </form>
-            </section>
-        </React.Fragment>
-    );
-};
+    props.onAddMovie(movie);
 
-export default MoviesForm;
+    // console.log(movie);
+    // setTitle('');
+  }
+
+  return (
+    <form onSubmit={submitHandler}>
+      <div className={classes.control}>
+        <label htmlFor='title'>Title</label>
+        <input type='text' id='title' ref={titleRef} />
+      </div>
+      <div className={classes.control}>
+        <label htmlFor='opening-text'>Opening Text</label>
+        <textarea rows='5' id='opening-text' ref={openingTextRef}></textarea>
+      </div>
+      <div className={classes.control}>
+        <label htmlFor='date'>Release Date</label>
+        <input type='text' id='date' ref={releaseDateRef} />
+      </div>
+      <button>Add Movie</button>
+    </form>
+  );
+}
+
+export default AddMovie;
